@@ -145,7 +145,7 @@ def plot_product_growth(max_n=40):
     for k in (3, 5, 10):
         i = k - 3
         ax.plot([k, k], [two[i], three[i]], "o", color=INK2, ms=4)
-        ax.text(k + 0.8, three[i] * 1.5, f"{k} mics: {two[i] + three[i]:,}", ha="left", va="bottom",
+        ax.text(k + 0.6, two[i] / 1.6, f"{k} mics: {two[i] + three[i]:,}", ha="left", va="top",
                 color=INK2, fontsize=9.5)
     ax.set_xlim(2, max_n + 7)
     ax.set_xlabel("Mics transmitting at once")

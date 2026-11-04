@@ -123,3 +123,13 @@ Demo instance: 470-474 MHz, 250 kHz step, 16 points, 5 mics, 500 kHz spacing, 25
 - Shure's Wireless Workbench page confirms it is free ("our free software for audio professionals"). This goes into the limitations and the Q&A.
 - `tools/show_outputs.py` prints every cell's output for review without Jupyter.
 - New helper `engine.uniform_grid_term_counts` gives T and Q on a uniform grid. Tested against enumeration at 5, 9 and 16 points. 40 mics need at least 782 grid points: 152,490 triple and 39,621,985 quadruple terms.
+
+### Phase 6: slides (done)
+
+- `slides/mic_planner_deck.pptx`: 12 slides at 16:9, built with python-pptx by `tools/build_slides.py`, which reads its numbers from `figures/numbers.json`. Calibri throughout, one accent colour (the chart blue), dark title and team slides, light content slides. Titles 36 to 48 pt, body 18 to 26 pt, two 14 pt source lines. At most five bullets per slide. Speaker notes on every slide.
+- `slides/deck_outline.md` is written by the same script: slide text plus speaker notes.
+- Follows the brief's suggested flow (title, problem, why it's hard, tool, bridge, demo, results, why quantum, shortfalls, next, team, references).
+- File check: the pptx skill's `validate.py` passes.
+- **Render check: Microsoft PowerPoint through COM** (`comtypes` added to the venv, render script `tools/render_slides.py`, output in `slides/render/`, git-ignored). Every slide inspected. First pass fixes: chart titles repeating the slide titles (slide versions of three figures now drop them), dead space on slides 4, 5 and 8, a growth-chart label sitting on a curve, a brute-force time that varies between runs (now "4,368 plans in about 10 ms"), and a role label wrapping into the card text. Second pass: no overflow or overlaps.
+- PowerPoint was not running before, and the script quits it afterwards.
+- Decision: slide 9 says "12,716 CNOTs at p = 3, and not run on hardware" rather than claiming the circuit is too deep for today's devices, which we have not tested.

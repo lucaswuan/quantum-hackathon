@@ -28,16 +28,22 @@ from micplanner.plots import (plot_clean_vs_p, plot_convergence, plot_ghost_exam
 from micplanner.quantum import FastQAOA, build_ansatz, compare_with_circuit, compile_ansatz, resource_card, tune
 
 
-def save(fig, name):
+def save(fig, name, slide_variant=False):
+    """Save the figure. With slide_variant, also save a copy without the chart title, since the slide has one."""
     fig.savefig(f"figures/{name}.png", dpi=200, bbox_inches="tight")
+    if slide_variant:
+        for ax in fig.axes:
+            for loc in ("left", "center", "right"):
+                ax.set_title("", loc=loc)
+        fig.savefig(f"figures/{name}_slide.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
 
 
 t_all = time.perf_counter()
 numbers = {}
 
-save(plot_ghost_example(), "fig_ghost_example")
-save(plot_product_growth(), "fig_product_growth")
+save(plot_ghost_example(), "fig_ghost_example", slide_variant=True)
+save(plot_product_growth(), "fig_product_growth", slide_variant=True)
 
 story = plan_mics(csv_path="outputs/plan_humanities_theatre.csv",
                   title="Five Shure channels, 470 to 474 MHz (illustrative band)")
@@ -53,7 +59,7 @@ mean_res = tune(fast, max_p=3, kind="mean")
 cvar_res = tune(fast, max_p=5, kind="cvar", alpha=0.1)
 save(plot_convergence(cvar_res[:3], "COBYLA convergence, CVaR objective"), "fig_convergence")
 save(plot_clean_vs_p({"Mean of C": mean_res, "CVaR, alpha 0.1": cvar_res}, bf.clean_share,
-                     sampled=(3, story.clean_share)), "fig_clean_vs_p")
+                     sampled=(3, story.clean_share)), "fig_clean_vs_p", slide_variant=True)
 
 # Histogram: QAOA samples against the exact uniform distribution over all plans.
 q_costs = np.array([cost_of(inst, mask_to_indices(m)) for m in story.counts])
@@ -61,7 +67,7 @@ q_w = np.array(list(story.counts.values())) / story.shots
 r_costs = fast.cost
 r_w = np.full(fast.dim, 1 / fast.dim)
 save(plot_histogram(q_costs, q_w, r_costs, r_w, labels=("QAOA, 8,000 samples", "Uniform random, all 4,368 plans")),
-     "fig_histogram")
+     "fig_histogram", slide_variant=True)
 
 # Red plan against the QAOA plan.
 newcomer = (0, 3, 6, 9, 12)
