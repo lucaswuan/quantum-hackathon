@@ -52,3 +52,20 @@ Greedy check: deterministic greedy (lowest frequency first, fewest new conflicts
 - Shure Wireless Workbench appears to be a free download. If confirmed, the "school AV tech with no software" story is weak on its own. Frame the pitch around the plain-English interface and the quantum modelling route, and say in the Q&A that free vendor tools exist and are far more complete.
 
 ## Phase log
+
+### Phase 0: setup (done)
+
+- Venv on Python 3.14.8. Installed with `--no-cache-dir`: qiskit 2.6.1, numpy 2.5.4, scipy 1.18.1, matplotlib 3.11.2, jupyter 1.1.1, nbconvert 7.17.2, ipykernel 7.4.0, python-pptx 1.0.2, pytest 9.2.0. Pinned in `requirements.txt`.
+- Smoke test: Bell state on `StatevectorSampler` (seed 7) gave 502 `00` and 498 `11`. `StatevectorEstimator` gave <ZZ> = 1.0.
+- Kernel registered with `--sys-prefix` as `python3` inside `.venv`.
+- **`QAOAAnsatz` is deprecated** in 2.6.1 (the NLocal and BlueprintCircuit classes were deprecated in Qiskit 2.1, removal in 3.0). Switched to the `qaoa_ansatz` function, as agreed.
+- `qaoa_ansatz` rejects a circuit as `mixer_operator`, so the XY mixer is passed as a `SparsePauliOp` with the even-pair terms listed before the odd-pair terms. Checked at 4 and 6 qubits: after transpiling (levels 0 to 3) the synthesized mixer equals exp(-iβH_odd) exp(-iβH_even) up to global phase, and does not equal exp(-iβH_XY). This matches the agreed mixer correction.
+- Gotcha: `Operator(PauliEvolutionGate)` returns the exact exponential, not the synthesized circuit. Always transpile before checking or simulating. At 16 qubits an untranspiled evolution gate could also be turned into a dense matrix, so the sampler always gets a transpiled circuit.
+- `RXX(β) RYY(β)` equals exp(-iβ(XX+YY)/2), and so does `XXPlusYYGate(2β)`.
+
+### Phase 1: engine (done)
+
+- `micplanner/engine.py`: parsing ("470-474 MHz", "250 kHz", "470 MHz to 474 MHz"), grid with the top edge excluded and exclusion edges included, P/T/Q enumeration with a strict "less than the guard" test, a checker that lists every product, cost on bit masks, brute force.
+- All frequencies are whole hertz, so guard tests never depend on float rounding.
+- Confirmed by tests (`tests/test_engine.py`, 9 passing): 16 points; 15, 56, 252 sets; 4,368 plans, 792 well spaced, 24 IM-free; {0, 2, 5, 9, 15} clean; inclusive guard gives 0 clean plans; the exclusion example leaves 13 points; the evenly spaced plan has 8 two-tone and 12 three-tone hits (4 triples and 3 quadruples, cost 7).
+- Decision: an exclusion range includes its edges. "472.0-472.5 MHz" removes 472.000, 472.250 and 472.500.
