@@ -69,3 +69,20 @@ Greedy check: deterministic greedy (lowest frequency first, fewest new conflicts
 - All frequencies are whole hertz, so guard tests never depend on float rounding.
 - Confirmed by tests (`tests/test_engine.py`, 9 passing): 16 points; 15, 56, 252 sets; 4,368 plans, 792 well spaced, 24 IM-free; {0, 2, 5, 9, 15} clean; inclusive guard gives 0 clean plans; the exclusion example leaves 13 points; the evenly spaced plan has 8 two-tone and 12 three-tone hits (4 triples and 3 quadruples, cost 7).
 - Decision: an exclusion range includes its edges. "472.0-472.5 MHz" removes 472.000, 472.250 and 472.500.
+
+### Phase 2: cost operator (done)
+
+- `micplanner/cost.py`: HUBO with one term per conflicting set, Pauli-Z expansion as a `SparsePauliOp` (identity kept, so the diagonal equals C(x) exactly), diagonal check, Z-strings by weight, naive CNOT count, greedy Rosenberg counter.
+- Diagonal check: exact on every basis state for 10- and 12-point instances (Qiskit `to_matrix`). At 16 qubits: 16 to 64 random states through `Statevector.expectation_value`, plus all 65,536 states by direct parity. Max error 0.
+- 948 Z-strings: 16, 120, 560, 252 by weight. Naive CNOTs 3,992 per cost layer.
+- QUBO: deterministic greedy Rosenberg needs 105 auxiliary variables, so **121 variables** against 16 qubits. Over 200 random tie-break orders the range is 114 to 125. The slide line will be "16 qubits here vs 121 variables as a QUBO" with the range in the notes.
+- w3 only rescales the IM terms. Clean plans stay at cost 0 for any w3 > 0 (tested at 0.5 and 2).
+
+### Phase 3: small run, 8 points and 3 mics (done)
+
+- `micplanner/quantum.py`: Bärtschi-Eidenbenz Dicke circuit, XY ring mixer (operator and explicit RXX/RYY versions), `qaoa_ansatz` with Dicke start and XY mixer, name-based angle binding, transpile to `['cx', 'rz', 'sx', 'x']`, `StatevectorSampler` sampling, exact NumPy fast path on the n-mic subspace, COBYLA tuning (grid scan for p = 1, then INTERP plus seeded random starts), circuit-vs-fast-path comparison, resource card.
+- The Dicke construction worked first time: exact for every n up to 8 and every k, and for (16, 5) after transpiling.
+- XY mixer keeps the Hamming weight exactly (n = 4 to 7). Synthesized mixer equals the group product (n = 4, 5, 6). For an odd ring the wrap-around pair gets its own group, so a 13-point instance uses three groups.
+- Small instance: 8 points, 3 mics, 56 plans, 14 clean (25%). Fast path vs circuit at p = 2: fidelity 1.0, leakage 1e-14. Mean objective: P(clean) 0.53, 0.82, 0.88 for p = 1, 2, 3. Sampled at p = 2 with 4,000 shots: 83.3% clean against 82.2% exact and 25% random.
+- CVaR with alpha 0.2 is flat here because 25% of plans already cost 0, more than alpha. It should behave differently at demo size, where only 0.55% are clean.
+- `tests/test_quantum.py`: 20 tests passing.
