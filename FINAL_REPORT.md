@@ -34,7 +34,7 @@ Git: 9 local commits, one per phase. No remote was created and nothing was pushe
 
 **Best plan.** All 24 clean plans tie at cost 0, so there is no single best. `plan_mics` returns the most common clean sample: **470.000, 470.500, 471.500, 472.750, 473.500 MHz** (0.5% of shots). Brute force, greedy and the integer program return 470.00, 470.50, 471.25, 472.25, 473.75. Every classical baseline solves the demo at once. Greedy from each of the 16 starting points ends clean 8 times. Simulated annealing ends clean in 50 of 50 runs.
 
-**Notebook runtime.** Headless `nbconvert --execute`: 81 s, 81 s and 116 s wall-clock across the three full runs tonight (the in-notebook timer reads 77 to 109 s). Under the 5-minute limit with room to spare.
+**Notebook runtime.** Headless `nbconvert --execute`: 81 s, 81 s, 116 s and 94 s wall-clock across the four full runs tonight (the in-notebook timer reads 77 to 109 s). The last run, on a copy that was then deleted, gave the same 7.11% and no errors. Under the 5-minute limit with room to spare.
 
 **Qubits and two-qubit gates** (basis `cx, rz, sx, x`, transpile level 1, all-to-all):
 

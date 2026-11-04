@@ -148,6 +148,6 @@ Demo instance: 470-474 MHz, 250 kHz step, 16 points, 5 mics, 500 kHz spacing, 25
 ### Phase 8: final check (done)
 
 - Notebook rebuilt from `tools/build_notebook.py` and executed in a fresh kernel with `jupyter nbconvert --to notebook --execute --inplace mic_planner.ipynb`: **115.6 s** wall-clock (in-notebook timer 109 s). No errors or warnings in any cell. Same numbers as before (7.11% IM-free samples, fidelity 1.0, 121 QUBO variables, same plans).
-- Runtime varies run to run on this laptop: 80.8 s, 81.1 s and 115.6 s for the three full headless runs. All are well under the 5-minute limit. The docs now say "under two minutes".
+- Runtime varies run to run on this laptop: 80.8 s, 81.1 s, 115.6 s and 94 s for the four full headless runs. The fourth ran on a temporary copy, `_timing_check.ipynb`, deleted afterwards. It gave the same outputs. All are well under the 5-minute limit. The docs now say "under two minutes".
 - `pytest`: 35 passed.
 - `FINAL_REPORT.md` written.
