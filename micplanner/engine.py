@@ -324,6 +324,19 @@ def brute_force(inst: Instance, w3=1.0) -> BruteForceResult:
                             best_plans, secs)
 
 
+def uniform_grid_term_counts(N: int) -> tuple[int, int]:
+    """T and Q set counts on N evenly spaced points when only exact landings count.
+
+    T counts evenly spaced triples. Q counts 4-sets that split into two pairs with equal sums.
+    """
+    T = sum(N - 2 * d for d in range(1, (N + 1) // 2))
+    Q = 0
+    for s in range(1, 2 * N - 2):
+        n_s = max(0, (s - 1) // 2 - max(0, s - (N - 1)) + 1)
+        Q += n_s * (n_s - 1) // 2
+    return T, Q
+
+
 def count_third_order_products(n_carriers: int) -> dict:
     """How many third-order products n carriers create (before asking where they land)."""
     two = n_carriers * (n_carriers - 1)

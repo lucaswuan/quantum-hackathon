@@ -1,11 +1,17 @@
 """Build every PNG in figures/ and print the numbers the slides quote.
 
-Run with the venv's Python from the project folder: python make_figures.py
+Run with the venv's Python from the project folder: python tools/make_figures.py
 It repeats the notebook's computations with the same seeds, so the slides and the notebook agree.
 """
 
 import json
+import os
+import sys
 import time
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
+os.chdir(ROOT)
 
 import matplotlib
 
@@ -43,7 +49,7 @@ save(excl.figure, "fig_plan_exclusion")
 inst = story.instance
 fast = FastQAOA(inst)
 bf = brute_force(inst)
-mean_res = tune(fast, max_p=5, kind="mean")
+mean_res = tune(fast, max_p=3, kind="mean")
 cvar_res = tune(fast, max_p=5, kind="cvar", alpha=0.1)
 save(plot_convergence(cvar_res[:3], "COBYLA convergence, CVaR objective"), "fig_convergence")
 save(plot_clean_vs_p({"Mean of C": mean_res, "CVaR, alpha 0.1": cvar_res}, bf.clean_share,

@@ -67,6 +67,14 @@ def test_checker_on_raw_frequencies():
     assert check_plan([470_000_000, 470_500_000, 471_250_000], 500_000, 250_000).clean
 
 
+def test_uniform_grid_formula_matches_enumeration():
+    from micplanner.engine import uniform_grid_term_counts
+    for N in (5, 9, 16):
+        inst = build_instance(f"470-{470 + N * 0.25} MHz", mics=2)
+        assert inst.n_points == N
+        assert uniform_grid_term_counts(N) == (len(inst.triples), len(inst.quads))
+
+
 def test_product_counts():
     assert count_third_order_products(40) == {"two-tone": 1560, "three-tone": 29640, "total": 31200}
     assert count_third_order_products(3)["total"] == 9
