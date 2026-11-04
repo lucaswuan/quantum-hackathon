@@ -1,0 +1,173 @@
+{
+ "grid_points": 16,
+ "plans": 4368,
+ "spaced": 792,
+ "clean": 24,
+ "clean_share": 0.005494505494505495,
+ "clean_share_spaced": 0.030303030303030304,
+ "brute_force_ms": 6.0498999955598265,
+ "story_plan_mhz": [
+  470.0,
+  470.5,
+  471.5,
+  472.75,
+  473.5
+ ],
+ "story_clean_share": 0.071125,
+ "story_plan_share": 0.005,
+ "story_seconds": {
+  "tune": 7.070390499997302,
+  "sample": 12.976471899994067,
+  "total": 20.19513440001174
+ },
+ "excl_points": 13,
+ "excl_plan_mhz": [
+  470.0,
+  470.5,
+  471.25,
+  472.75,
+  473.75
+ ],
+ "excl_clean_share": 0.107625,
+ "excl_random_share": 0.006216006216006216,
+ "mean_clean_by_p": [
+  0.01749892261555043,
+  0.03352694170006421,
+  0.038741607289803665,
+  0.036622244868871695,
+  0.03943927768295268
+ ],
+ "cvar_clean_by_p": [
+  0.01849742303699503,
+  0.04031381629595908,
+  0.06959300982013608,
+  0.10002401328525776,
+  0.12115223200742577
+ ],
+ "cvar_p3_angles": {
+  "gamma": [
+   -0.6975750547589862,
+   -1.0003400143343986,
+   -1.159857087660356
+  ],
+  "beta": [
+   0.30387907019615373,
+   0.25118306057757495,
+   0.19912159306628946
+  ]
+ },
+ "agreement": {
+  "fidelity": 1.0000000000000702,
+  "leakage": -6.927791673660977e-14,
+  "max_prob_diff": 3.0270924655795284e-16,
+  "max_amp_diff": 2.3271586984313473e-15,
+  "seconds": 13.519866400005412
+ },
+ "resource_card": {
+  "qubits": 16,
+  "z_strings": {
+   "1": 16,
+   "2": 120,
+   "3": 560,
+   "4": 252
+  },
+  "reps": 3,
+  "basis": [
+   "cx",
+   "rz",
+   "sx",
+   "x"
+  ],
+  "optimization_level": 1,
+  "dicke": {
+   "cx": 560,
+   "depth": 1105,
+   "size": 1885,
+   "transpile_s": 0.013868200010620058
+  },
+  "cost_layer": {
+   "cx": 4006
+  },
+  "cost_layer_single_gate": {
+   "cx": 2570,
+   "depth": 1885,
+   "size": 3518,
+   "transpile_s": 0.04033410000556614
+  },
+  "cost_layer_naive_cx": 3992,
+  "mixer_layer": {
+   "cx": 46,
+   "depth": 47,
+   "size": 238,
+   "transpile_s": 0.005355300003429875
+  },
+  "full": {
+   "cx": 12716,
+   "depth": 12076,
+   "size": 17509,
+   "transpile_s": 0.07437819999177009
+  }
+ },
+ "z_strings": {
+  "1": 16,
+  "2": 120,
+  "3": 560,
+  "4": 252
+ },
+ "qubo": {
+  "qubits": 16,
+  "aux": 105,
+  "variables": 121,
+  "best_variables": 114,
+  "worst_variables": 125,
+  "trials": 200
+ },
+ "newcomer_counts": {
+  "spacing": 0,
+  "two-tone": 8,
+  "three-tone": 12
+ },
+ "newcomer_cost": 7.0,
+ "greedy_plan": [
+  0,
+  2,
+  5,
+  9,
+  15
+ ],
+ "greedy_clean": true,
+ "greedy_starts_clean": 8,
+ "sa_clean_runs": 50,
+ "sa_seconds": 0.057405300001846626,
+ "random_share_8000": 0.005,
+ "milp_plan": [
+  0,
+  2,
+  5,
+  9,
+  15
+ ],
+ "milp_seconds": 0.058638800008338876,
+ "six_mic_points": 21,
+ "six_mic_plans": 54264,
+ "six_mic_clean": 2,
+ "six_mic_best": [
+  [
+   0,
+   2,
+   8,
+   13,
+   17,
+   20
+  ],
+  [
+   0,
+   3,
+   7,
+   12,
+   18,
+   20
+  ]
+ ],
+ "total_seconds": 81.81501910000225
+}

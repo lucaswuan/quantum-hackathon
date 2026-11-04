@@ -327,8 +327,13 @@ def compare_with_circuit(fast: FastQAOA, compiled: QuantumCircuit, gammas, betas
 # Resource card
 
 def resource_card(cost_op: SparsePauliOp, n_mics: int, reps: int, optimization_level=1, seed=17) -> dict:
-    """Qubits, Z-strings and transpiled gate counts for each piece and for the full circuit."""
-    from .cost import z_strings_by_weight
+    """Qubits, Z-strings and transpiled gate counts for each piece and for the full circuit.
+
+    `cost_layer` is the cost layer as qaoa_ansatz builds it, measured as the one-layer circuit
+    minus the Dicke and mixer pieces. `cost_layer_single_gate` is the same layer synthesized as
+    one PauliEvolutionGate, which shares CNOT ladders between terms and comes out smaller.
+    """
+    from .cost import naive_cnot_count, z_strings_by_weight
 
     n = cost_op.num_qubits
 
@@ -343,8 +348,11 @@ def resource_card(cost_op: SparsePauliOp, n_mics: int, reps: int, optimization_l
     cost_layer.append(PauliEvolutionGate(drop_identity(cost_op), time=0.37), range(n))
     mixer = QuantumCircuit(n)
     mixer.append(PauliEvolutionGate(xy_mixer_operator(n), time=0.41), range(n))
-    full = build_ansatz(cost_op, n_mics, reps)
+    dicke, mix = counts(dicke_circuit(n, n_mics)), counts(mixer)
+    one = counts(build_ansatz(cost_op, n_mics, 1))
+    full = counts(build_ansatz(cost_op, n_mics, reps))
     return {"qubits": n, "z_strings": z_strings_by_weight(cost_op), "reps": reps,
-            "basis": BASIS, "optimization_level": optimization_level,
-            "dicke": counts(dicke_circuit(n, n_mics)), "cost_layer": counts(cost_layer),
-            "mixer_layer": counts(mixer), "full": counts(full)}
+            "basis": BASIS, "optimization_level": optimization_level, "dicke": dicke,
+            "cost_layer": {"cx": one["cx"] - dicke["cx"] - mix["cx"]},
+            "cost_layer_single_gate": counts(cost_layer), "cost_layer_naive_cx": naive_cnot_count(cost_op),
+            "mixer_layer": mix, "full": full}

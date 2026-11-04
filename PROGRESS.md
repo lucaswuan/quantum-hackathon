@@ -86,3 +86,29 @@ Greedy check: deterministic greedy (lowest frequency first, fewest new conflicts
 - Small instance: 8 points, 3 mics, 56 plans, 14 clean (25%). Fast path vs circuit at p = 2: fidelity 1.0, leakage 1e-14. Mean objective: P(clean) 0.53, 0.82, 0.88 for p = 1, 2, 3. Sampled at p = 2 with 4,000 shots: 83.3% clean against 82.2% exact and 25% random.
 - CVaR with alpha 0.2 is flat here because 25% of plans already cost 0, more than alpha. It should behave differently at demo size, where only 0.55% are clean.
 - `tests/test_quantum.py`: 20 tests passing.
+
+### Phase 4: full run, baselines, figures (done)
+
+Demo instance: 470-474 MHz, 250 kHz step, 16 points, 5 mics, 500 kHz spacing, 250 kHz IM guard. All numbers below come from `make_figures.py` (written to `figures/numbers.json`) with fixed seeds (tuning 7, sampling 2026).
+
+- **Fast path vs circuit at 16 qubits (p = 3):** fidelity 1.0000000000, leakage 7e-14, max amplitude difference 2e-15. The Statevector run of the 12,716-CNOT circuit takes about 15 to 19 s.
+- **Exact IM-free probability by layer** (fast path):
+
+  | p | Mean of C | CVaR, alpha 0.1 |
+  |---|---|---|
+  | 1 | 1.75% | 1.85% |
+  | 2 | 3.35% | 4.03% |
+  | 3 | 3.87% | 6.96% |
+  | 4 | 3.66% | 10.00% |
+  | 5 | 3.94% | 12.12% |
+
+  Uniform random is 0.55%. CVaR gives more IM-free samples, so it is the objective kept, as the brief asks. Alpha 0.1, 0.15 and 0.25 all reach the same p = 3 optimum. The mean objective stalls near 4%. The circuit runs at p = 3. p = 4 and 5 come from the fast path only, to keep the notebook runtime down, and are labelled that way.
+- **Sampled on the circuit:** 8,000 shots at p = 3 with CVaR angles give 7.1% IM-free samples (exact 6.96%), about 13 times uniform random. The most common clean sample is {470.000, 470.500, 471.500, 472.750, 473.500} MHz, at 0.5% of shots. With 24 clean plans tied, no single plan dominates, as agreed.
+- **Exclusion case** (472.0-472.5 MHz kept clear): 13 points, 1,287 plans, 8 clean (0.62%). QAOA at p = 3 gets 10.8% IM-free samples. Plan {470.000, 470.500, 471.250, 472.750, 473.750} MHz.
+- **Baselines** (all solve the demo instantly): brute force 10 ms (24 clean of 4,368); greedy 2 ms, returns {0, 2, 5, 9, 15}, clean; greedy from each of the 16 starting points: 8 of 16 clean; simulated annealing with swap moves: 50 of 50 runs clean in 0.08 s; SciPy `milp`: optimal in 0.1 s; 8,000 uniform random plans: 0.50% clean.
+- **Newcomer plan** {470.00, 470.75, 471.50, 472.25, 473.00}: 8 two-tone and 12 three-tone hits (20 in all), cost 7.
+- **Resource card** (basis `cx, rz, sx, x`, level 1): Dicke 560 CX; cost layer as built by `qaoa_ansatz` 4,006 CX (naive ladder count 3,992; 2,570 if the whole layer is synthesized as one `PauliEvolutionGate`, which shares ladders); mixer 46 CX; full p = 3 circuit 12,716 CX, depth 12,076. Transpiling takes about 0.1 s. Level 2 or 3 brings the full circuit to 12,536 CX but simulates slower, so level 1 stays.
+- **6-mic case:** 21 points, 54,264 plans, 2 clean ({0, 2, 8, 13, 17, 20} and its mirror). Kept as a classical figure, as agreed. A 21-qubit circuit run would take minutes, which breaks the budget.
+- **StatevectorEstimator** at 16 qubits took about 50 s for <C>, <N>, <N^2>. It gave <C> equal to the fast path to 1e-12, <N> = 5 and <N^2> = 25 (zero variance in the mic count). Too slow for the notebook at 16 qubits, so the notebook uses it on the 8-point instance and uses `Statevector` for the 16-qubit fidelity check.
+- Figures in `figures/`: ghost example, product growth, story and exclusion spectra, newcomer plan, newcomer vs QAOA, histogram, convergence, IM-free share by layer. Static PNGs on a light background. Palette checked with the dataviz validator (blue/orange pass every check). Red is used only for hits, always with an x marker and a label.
+- Decision: the brief's "greedy with red hits" panel uses the newcomer plan instead, as agreed. Greedy's clean result is reported beside it.
