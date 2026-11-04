@@ -1,0 +1,9 @@
+qiskit==2.6.1
+numpy==2.5.4
+scipy==1.18.1
+matplotlib==3.11.2
+jupyter==1.1.1
+nbconvert==7.17.2
+ipykernel==7.4.0
+python-pptx==1.0.2
+pytest==9.2.0
