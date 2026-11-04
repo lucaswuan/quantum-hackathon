@@ -36,7 +36,7 @@ The person using it never sees a QUBO, a Hamiltonian, a penalty weight or a mixe
 
 **What this is not.** QAOA is a heuristic. The demo has 4,368 possible plans, and brute force solves it in about 10 ms. We claim no speed-up. Our point is modelling: the intermodulation rules are three- and four-way interactions, QAOA takes them as they are, and the circuit itself keeps the mic count fixed.
 
-**How to run.** Python 3.10 or newer with the packages in `requirements.txt`, then Run all. Everything runs live on Qiskit's statevector simulator, in about two minutes on our laptop. Nothing is precomputed or loaded from a file. The code lives in the small `micplanner` package next to this notebook.
+**How to run.** Python 3.10 or newer with the packages in `requirements.txt`, then Run all. Everything runs live on Qiskit's statevector simulator, in under two minutes on our laptop. Nothing is precomputed or loaded from a file. The code lives in the small `micplanner` package next to this notebook.
 """)
 
 code(r"""

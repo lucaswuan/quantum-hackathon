@@ -133,3 +133,14 @@ Demo instance: 470-474 MHz, 250 kHz step, 16 points, 5 mics, 500 kHz spacing, 25
 - **Render check: Microsoft PowerPoint through COM** (`comtypes` added to the venv, render script `tools/render_slides.py`, output in `slides/render/`, git-ignored). Every slide inspected. First pass fixes: chart titles repeating the slide titles (slide versions of three figures now drop them), dead space on slides 4, 5 and 8, a growth-chart label sitting on a curve, a brute-force time that varies between runs (now "4,368 plans in about 10 ms"), and a role label wrapping into the card text. Second pass: no overflow or overlaps.
 - PowerPoint was not running before, and the script quits it afterwards.
 - Decision: slide 9 says "12,716 CNOTs at p = 3, and not run on hardware" rather than claiming the circuit is too deep for today's devices, which we have not tested.
+
+### Phase 7: team docs (done)
+
+- `team/explainer_1_problem_engine.md`, `explainer_2_quantum_circuit.md`, `explainer_3_results_and_baselines.md`, `explainer_4_story_and_demo.md`: one per role, each with what the part does, how it works in plain words, where the code lives, numbers to remember and likely questions.
+- `team/judge_qa.md`: 23 questions, including every one the brief lists.
+- `team/demo_script.md`: a 2 to 3 minute live demo with what to click and say, plus a fallback.
+- `team/limitations.md`: an honest list.
+- `README.md`: what it is, three commands to run it, headline numbers, folder map, how to rebuild generated files.
+- Style pass: no em or en dashes in any deliverable (the only en dash is in the parser's regex, so users can type "470–474"). No American spellings in prose; "color" and "center" appear only as library argument names.
+- Decision: the "What did AI do?" answers say an AI coding assistant wrote the first version from the team's brief, and leave a bracketed gap for each member to say what they checked or changed. Only the team can fill that in truthfully.
+- Removed one unsourced RF claim (about in-ear monitor racks) from the limitations draft.
