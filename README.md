@@ -22,7 +22,7 @@ python -m venv .venv
 .venv\Scripts\jupyter notebook mic_planner.ipynb
 ```
 
-Then use Kernel, Restart and Run All. The whole notebook takes about 80 seconds on our laptop. On macOS or Linux, use `.venv/bin/` instead of `.venv\Scripts\`.
+Then use Kernel, Restart and Run All. The whole notebook takes under two minutes on our laptop (81 to 116 seconds across runs). On macOS or Linux, use `.venv/bin/` instead of `.venv\Scripts\`.
 
 To run it headless: `.venv\Scripts\jupyter nbconvert --to notebook --execute --inplace mic_planner.ipynb`. To run the tests: `.venv\Scripts\python -m pytest`.
 

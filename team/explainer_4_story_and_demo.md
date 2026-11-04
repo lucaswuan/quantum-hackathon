@@ -52,7 +52,7 @@ Speaker notes for every slide are in the deck and in `slides/deck_outline.md`.
 ## Running the demo
 
 - Open `mic_planner.ipynb` in Jupyter with the project's `.venv`. The notebook is saved with its outputs, so you can show results even before running anything.
-- The `plan_mics` cell in section 2 takes about 30 seconds on Lucas's laptop. The exclusion cell takes about 6 seconds. The whole notebook takes about 80 seconds.
+- The `plan_mics` cell in section 2 takes about 30 seconds on Lucas's laptop. The exclusion cell takes about 6 seconds. The whole notebook takes under two minutes (81 to 116 seconds across runs).
 - Full script: `team/demo_script.md`.
 - **Backup:** if the live run is slow or fails, scroll to the saved outputs. They are from a real run with the same seeds.
 
@@ -63,7 +63,7 @@ Speaker notes for every slide are in the deck and in `slides/deck_outline.md`.
 - Plan: 470.000, 470.500, 471.500, 472.750, 473.500 MHz.
 - 16 qubits vs 121 QUBO variables.
 - 12,716 CNOTs at p = 3.
-- About 80 seconds to run the whole notebook.
+- Under two minutes to run the whole notebook.
 
 ## Likely questions
 
