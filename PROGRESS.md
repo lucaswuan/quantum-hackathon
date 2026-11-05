@@ -151,3 +151,9 @@ Demo instance: 470-474 MHz, 250 kHz step, 16 points, 5 mics, 500 kHz spacing, 25
 - Runtime varies run to run on this laptop: 80.8 s, 81.1 s, 115.6 s and 94 s for the four full headless runs. The fourth ran on a temporary copy, `_timing_check.ipynb`, deleted afterwards. It gave the same outputs. All are well under the 5-minute limit. The docs now say "under two minutes".
 - `pytest`: 35 passed.
 - `FINAL_REPORT.md` written.
+
+## November 4: pushed to GitHub
+
+- Lucas asked for everything to go to https://github.com/lucaswuan/quantum-hackathon (a new, empty, public repo). This overrides the brief's "keep it local" rule for this repo.
+- Before pushing, the tracked files were scanned for secrets, emails and local paths. None were found. `.venv/` and `slides/render/` stay git-ignored.
+- The deck's metadata had python-pptx's stock "last modified by" name. `tools/build_slides.py` now sets title and author to neutral values. The slide content is unchanged.

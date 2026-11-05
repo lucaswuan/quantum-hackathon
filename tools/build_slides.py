@@ -414,6 +414,10 @@ text(s, MARGIN, Inches(6.55), Inches(12), Inches(0.5),
 notes(s, "Full references with links are in the notebook's last section. Every number on these slides comes "
          "from code in the notebook or from a page we opened and cite here.")
 
+props = prs.core_properties
+props.title = "IM-free wireless mic planner"
+props.author = props.last_modified_by = "[Team name]"
+
 out = os.path.join(ROOT, "slides", "mic_planner_deck.pptx")
 os.makedirs(os.path.dirname(out), exist_ok=True)
 prs.save(out)
