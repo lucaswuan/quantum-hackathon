@@ -17,7 +17,7 @@ Every deliverable in section 6 of the brief exists, and the final checks in sect
 | CSV plans | `outputs/` | Written by `plan_mics`. Added beyond the brief's folder map. |
 | Log | `PROGRESS.md` | One section per phase. |
 
-Git: 9 local commits, one per phase. No remote was created and nothing was pushed.
+Git: one commit per phase, pushed to https://github.com/lucaswuan/quantum-hackathon on November 4.
 
 ## Key numbers
 
