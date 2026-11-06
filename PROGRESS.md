@@ -157,3 +157,24 @@ Demo instance: 470-474 MHz, 250 kHz step, 16 points, 5 mics, 500 kHz spacing, 25
 - Lucas asked for everything to go to https://github.com/lucaswuan/quantum-hackathon (a new, empty, public repo). This overrides the brief's "keep it local" rule for this repo.
 - Before pushing, the tracked files were scanned for secrets, emails and local paths. None were found. `.venv/` and `slides/render/` stay git-ignored.
 - The deck's metadata had python-pptx's stock "last modified by" name. `tools/build_slides.py` now sets title and author to neutral values. The slide content is unchanged.
+
+## November 5: submission fixes
+
+The submission form takes one `.ipynb` file, so the notebook has to run with nothing beside it.
+
+- **The problem:** uploaded alone, the old notebook stopped at its first code cell with `ModuleNotFoundError: No module named 'micplanner'`.
+- **The fix:** a new Setup section checks for packages and installs any that are missing. Collapsed cells then write the seven `micplanner` files into `micplanner_embedded/` with `%%writefile`. That folder goes at the end of `sys.path`, so a real `micplanner/` folder next to the notebook still wins and never gets overwritten.
+- `tools/build_notebook.py` copies the code straight from `micplanner/*.py`. `tests/test_notebook.py` fails if the two differ. `tools/run_standalone.py` runs the notebook alone in an empty temporary folder and saves its outputs, so the saved outputs come from the embedded code.
+- Decision: packages are installed only if missing, or if Qiskit is older than 2.1. If the version isn't 2.6.1, the notebook prints a note that gate counts may differ.
+- **Tests, each with only the `.ipynb` in an empty folder:**
+
+  | Setup | Wall-clock | Result |
+  |---|---|---|
+  | Project venv, Qiskit 2.6.1 | 102 s, 121 s | Same numbers |
+  | Brand-new venv with no Qiskit, installed by the notebook | 197 s | Same numbers |
+  | Qiskit 2.1.0 | 100 s | Same numbers |
+  | Qiskit 2.6.2 | 101 s | Same numbers |
+
+  Same numbers means 7.11% IM-free samples, fidelity 1.0 and 12,716 CNOTs. A static check found nothing that would stop the code parsing on Python 3.10, but only Python 3.14 on Windows was actually run.
+- **Slide maths:** slide 5 used rare Unicode subscript characters that Calibri doesn't have. They rendered here through font fallback and can break elsewhere. Slide text now uses real subscript formatting, the cost function on slide 5 is a typeset image (`figures/fig_cost_equation.png`), and the chart labels on slides 2 and 3 use Matplotlib's maths text.
+- **Incident:** `tools/render_slides.py` attached to a PowerPoint that was already open, and its `Quit` very likely closed it. The deck had been locked seconds earlier, and PowerPoint was gone right after. The saved deck had no edits. The script now refuses to run while PowerPoint is open.

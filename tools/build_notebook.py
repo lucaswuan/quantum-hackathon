@@ -1,7 +1,7 @@
-"""Write mic_planner.ipynb from the cells below (without outputs).
+"""Write mic_planner.ipynb from the cells below (without outputs), with micplanner/*.py embedded.
 
 Run from the project folder: python tools/build_notebook.py
-Then execute it: jupyter nbconvert --to notebook --execute --inplace mic_planner.ipynb
+Then run and save it as a judge would: python tools/run_standalone.py
 """
 
 import os
@@ -20,6 +20,15 @@ def code(text):
     cells.append(nbf.v4.new_code_cell(text.strip("\n")))
 
 
+def embedded_module(name):
+    """A collapsed cell that writes micplanner/<name> from the source file, unchanged."""
+    with open(os.path.join(ROOT, "micplanner", name), encoding="utf-8") as fh:
+        source = fh.read()
+    cell = nbf.v4.new_code_cell(f"%%writefile micplanner_embedded/micplanner/{name}\n{source}")
+    cell.metadata["jupyter"] = {"source_hidden": True, "outputs_hidden": True}
+    cells.append(cell)
+
+
 md(r"""
 # IM-free wireless mic planner
 
@@ -36,21 +45,70 @@ The person using it never sees a QUBO, a Hamiltonian, a penalty weight or a mixe
 
 **What this is not.** QAOA is a heuristic. The demo has 4,368 possible plans, and brute force solves it in about 10 ms. We claim no speed-up. Our point is modelling: the intermodulation rules are three- and four-way interactions, QAOA takes them as they are, and the circuit itself keeps the mic count fixed.
 
-**How to run.** Python 3.10 or newer with the packages in `requirements.txt`, then Run all. Everything runs live on Qiskit's statevector simulator, in under two minutes on our laptop. Nothing is precomputed or loaded from a file. The code lives in the small `micplanner` package next to this notebook.
+**How to run.** Open this one file in Python 3.10 or newer and use Run all. The notebook carries its own code, and the Setup section installs any missing packages. Everything runs live on Qiskit's statevector simulator, in about two minutes on our laptop. Nothing is precomputed or loaded from a file.
+""")
+
+md(r"""
+## Setup
+
+This notebook is one self-contained file. The cells in this section run first.
+
+1. The next cell checks for the Python packages and installs any that are missing.
+2. The collapsed cells after it write the `micplanner` package, about 1,100 lines of plain Python, into a folder called `micplanner_embedded` next to this notebook.
+
+To read the code, click the `...` bar of a collapsed cell. If your viewer shows those cells expanded, scroll down to section 1.
 """)
 
 code(r"""
-import time, platform
+import importlib, os, sys, time
+from importlib.metadata import PackageNotFoundError, version
+
 T0 = time.perf_counter()
+TESTED_QISKIT = "2.6.1"
+MINIMUM_QISKIT = (2, 1)
+
+
+def packages_missing():
+    try:
+        for package in ("numpy", "scipy", "matplotlib"):
+            version(package)
+        return tuple(int(part) for part in version("qiskit").split(".")[:2]) < MINIMUM_QISKIT
+    except PackageNotFoundError:
+        return True
+
+
+if packages_missing():
+    %pip install -q "qiskit==2.6.1" numpy scipy matplotlib
+    importlib.invalidate_caches()
+
+print("Qiskit", version("qiskit"), "| SciPy", version("scipy"), "| Matplotlib", version("matplotlib"))
+if version("qiskit") != TESTED_QISKIT:
+    print(f"The numbers in the text come from Qiskit {TESTED_QISKIT}, so gate counts may differ slightly here.")
+
+os.makedirs("micplanner_embedded/micplanner", exist_ok=True)
+sys.path.append(os.path.abspath("micplanner_embedded"))
+""")
+
+for module in ("__init__.py", "engine.py", "cost.py", "quantum.py", "baselines.py", "plots.py", "api.py"):
+    embedded_module(module)
+
+md(r"""
+Now import it. If a `micplanner` folder already sits next to the notebook, as it does in the project's repo, Python uses that one, and the embedded copy is only a fallback.
+""")
+
+code(r"""
+import platform
 
 import numpy as np
 import matplotlib.pyplot as plt
 import qiskit
 from IPython.display import Markdown, display
 
+import micplanner
 from micplanner import plan_mics, engine, cost, quantum, baselines, plots
 
 print("Python", platform.python_version(), "| Qiskit", qiskit.__version__, "| NumPy", np.__version__)
+print("Code loaded from", os.path.relpath(os.path.dirname(micplanner.__file__)))
 """)
 
 md(r"""

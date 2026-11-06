@@ -115,7 +115,7 @@ def plot_ghost_example():
         ax.vlines(f / 1e6, 0, 1, color=BLUE, lw=2.6)
         ax.plot(f / 1e6, 1, "o", color=BLUE, ms=8, mec=SURFACE, mew=2)
         ax.text(f / 1e6, 1.08, f"{name}\n{f / 1e6:.2f} MHz", ha="center", va="bottom", color=INK, fontsize=10)
-    for g, rule in ((g1, "2 x f1 - f2"), (g2, "2 x f2 - f1")):
+    for g, rule in ((g1, r"$2f_1 - f_2$"), (g2, r"$2f_2 - f_1$")):
         ax.vlines(g / 1e6, 0, 0.5, color=MUTED, lw=2)
         ax.text(g / 1e6, 0.56, f"{rule}\n= {g / 1e6:.2f} MHz", ha="center", va="bottom", color=INK2, fontsize=10)
     ax.annotate("A third mic tuned here\nwould pick up this ghost", xy=(g2 / 1e6 + 0.02, 0.3),
@@ -151,8 +151,8 @@ def plot_product_growth(max_n=40):
     ax.set_xlabel("Mics transmitting at once")
     ax.set_ylabel("Third-order products (log scale)")
     ax.set_title("Products grow roughly with the cube of the mic count", loc="left")
-    ax.legend(handles=[Line2D([], [], color=ORANGE, lw=2, label="f_a + f_b - f_c"),
-                       Line2D([], [], color=BLUE, lw=2, label="2 f_a - f_b")], loc="upper left")
+    ax.legend(handles=[Line2D([], [], color=ORANGE, lw=2, label=r"$f_a + f_b - f_c$"),
+                       Line2D([], [], color=BLUE, lw=2, label=r"$2f_a - f_b$")], loc="upper left")
     _tidy(ax)
     fig.tight_layout()
     return fig

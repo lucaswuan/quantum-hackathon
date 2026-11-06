@@ -22,7 +22,9 @@ python -m venv .venv
 .venv\Scripts\jupyter notebook mic_planner.ipynb
 ```
 
-Then use Kernel, Restart and Run All. The whole notebook takes under two minutes on our laptop (81 to 116 seconds across runs). On macOS or Linux, use `.venv/bin/` instead of `.venv\Scripts\`.
+Then use Kernel, Restart and Run All. The whole notebook takes about two minutes on our laptop. On macOS or Linux, use `.venv/bin/` instead of `.venv\Scripts\`.
+
+`mic_planner.ipynb` also works as a single file with nothing else beside it. Its Setup section installs any missing packages and writes its own copy of the code into `micplanner_embedded/`. If a `micplanner/` folder sits next to it, as it does in this repo, Python uses that folder instead.
 
 To run it headless: `.venv\Scripts\jupyter nbconvert --to notebook --execute --inplace mic_planner.ipynb`. To run the tests: `.venv\Scripts\python -m pytest`.
 
@@ -61,9 +63,12 @@ mic-planner/
 
 ## Rebuilding the generated files
 
+Edit the code in `micplanner/`, not the notebook's Setup cells. The notebook's copy is generated, and a test fails if the two drift apart. After changing the code, run `build_notebook.py` and then `run_standalone.py`.
+
 ```
 .venv\Scripts\python tools/make_figures.py      figures/ and figures/numbers.json (about 80 s)
-.venv\Scripts\python tools/build_notebook.py    mic_planner.ipynb, without outputs
+.venv\Scripts\python tools/build_notebook.py    mic_planner.ipynb with the code embedded, without outputs
+.venv\Scripts\python tools/run_standalone.py    runs the notebook alone in an empty folder and saves its outputs
 .venv\Scripts\python tools/build_slides.py      slides/ (reads figures/numbers.json)
 .venv\Scripts\python tools/render_slides.py     slide PNGs through PowerPoint (needs comtypes and PowerPoint)
 ```

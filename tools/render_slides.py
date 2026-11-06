@@ -14,6 +14,14 @@ deck = os.path.join(ROOT, "slides", sys.argv[1] if len(sys.argv) > 1 else "mic_p
 out = os.path.join(ROOT, "slides", "render")
 os.makedirs(out, exist_ok=True)
 
+try:
+    comtypes.client.GetActiveObject("PowerPoint.Application")
+except OSError:
+    pass
+else:
+    # CreateObject would attach to the open PowerPoint, and Quit below would close it.
+    sys.exit("PowerPoint is open. Save your work and close it, then run this again.")
+
 app = comtypes.client.CreateObject("PowerPoint.Application")
 try:
     pres = app.Presentations.Open(deck, True, False, False)  # read-only, untitled off, no window

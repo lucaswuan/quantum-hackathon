@@ -39,9 +39,21 @@ def save(fig, name, slide_variant=False):
     plt.close(fig)
 
 
+def save_cost_equation():
+    """The slide's cost function, typeset by Matplotlib: white on transparent, for the dark bar on slide 5."""
+    equation = (r"$C(x)=\sum_{(k,l)\in P}x_kx_l+\sum_{(k,l,m)\in T}x_kx_lx_m"
+                r"+\sum_{(k,l,p,m)\in Q}x_kx_lx_px_m,\qquad\sum_kx_k=5$")
+    with plt.rc_context({"mathtext.fontset": "cm"}):
+        fig = plt.figure(figsize=(11, 1))
+        fig.text(0.5, 0.5, equation, ha="center", va="center", fontsize=22, color="white")
+        fig.savefig("figures/fig_cost_equation.png", dpi=300, bbox_inches="tight", pad_inches=0.02, transparent=True)
+    plt.close(fig)
+
+
 t_all = time.perf_counter()
 numbers = {}
 
+save_cost_equation()
 save(plot_ghost_example(), "fig_ghost_example", slide_variant=True)
 save(plot_product_growth(), "fig_product_growth", slide_variant=True)
 

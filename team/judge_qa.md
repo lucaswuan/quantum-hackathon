@@ -69,4 +69,4 @@ D-Wave's frequency-selection example models forbidden spacings between frequenci
 16 grid points keep the full circuit simulation at about 15 seconds and the notebook under 2 minutes. Six mics would need 21 points, with only 2 clean plans out of 54,264.
 
 ### 23. Can I run it myself?
-Yes. Install the packages in `requirements.txt` and run the notebook top to bottom. It takes under two minutes on our laptop, and nothing is precomputed.
+Yes. Open the notebook and use Run all. It is one self-contained file: it installs any missing packages and carries its own code. It takes about two minutes on our laptop, and nothing is precomputed.

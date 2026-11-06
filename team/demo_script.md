@@ -44,7 +44,7 @@ Run the notebook once with Kernel, Restart and Run All, so every output is fresh
 
 **2:20. Close**
 
-> "Everything here reruns from scratch in under two minutes. Happy to take questions."
+> "Everything here reruns from scratch in about two minutes. Happy to take questions."
 
 ---
 

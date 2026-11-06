@@ -6,6 +6,7 @@ Numbers come from figures/numbers.json, which make_figures.py writes from code r
 
 import json
 import os
+import re
 
 from lxml import etree
 from pptx import Presentation
@@ -68,6 +69,28 @@ def new_slide(title, dark=False, size=36):
     return s
 
 
+SUBSCRIPT = re.compile(r"([A-Za-z])_\{([^}]+)\}")
+
+
+def plain(chunk):
+    """The text as it reads in the outline: f_{k} becomes f_k."""
+    return SUBSCRIPT.sub(r"\1_\2", chunk)
+
+
+def math_runs(chunk, opt):
+    """Split "2f_{k}" into plain text, an italic variable and a true subscript run."""
+    parts, pos = [], 0
+    for m in SUBSCRIPT.finditer(chunk):
+        if m.start() > pos:
+            parts.append((chunk[pos:m.start()], opt))
+        parts.append((m.group(1), {**opt, "italic": True}))
+        parts.append((m.group(2), {**opt, "italic": True, "subscript": True}))
+        pos = m.end()
+    if pos < len(chunk):
+        parts.append((chunk[pos:], opt))
+    return parts
+
+
 def _bullet(p, indent=0.32):
     pPr = p._p.get_or_add_pPr()
     pPr.set("marL", str(Emu(Inches(indent))))
@@ -97,17 +120,21 @@ def text(slide, x, y, w, h, paras, size=20, color=INK, bold=False, bullets=False
         if line_spacing:
             p.line_spacing = line_spacing
         runs = para if isinstance(para, list) else [(para, {})]
-        for chunk, opt in runs:
-            r = p.add_run()
-            r.text = chunk
-            r.font.name = opt.get("font", font)
-            r.font.size = Pt(opt.get("size", size))
-            r.font.bold = opt.get("bold", bold)
-            r.font.color.rgb = opt.get("color", color)
+        for whole, whole_opt in runs:
+            for chunk, opt in math_runs(whole, whole_opt):
+                r = p.add_run()
+                r.text = chunk
+                r.font.name = opt.get("font", font)
+                r.font.size = Pt(opt.get("size", size))
+                r.font.bold = opt.get("bold", bold)
+                r.font.italic = opt.get("italic", False)
+                r.font.color.rgb = opt.get("color", color)
+                if opt.get("subscript"):
+                    r._r.get_or_add_rPr().set("baseline", "-25000")
         if bullets:
             _bullet(p)
         if record:
-            outline[-1]["body"].append(("- " if bullets else "") + "".join(c for c, _ in runs))
+            outline[-1]["body"].append(("- " if bullets else "") + plain("".join(c for c, _ in runs)))
     return tb
 
 
@@ -179,7 +206,7 @@ notes(s, "Hi, we're [Team name]. Our project turns a real sound-engineering head
 # 2. The problem
 s = new_slide("Two mics on stage make two ghost signals")
 text(s, MARGIN, Inches(1.45), Inches(12), Inches(1.6),
-     ["Mics at f1 and f2 mix and create third-order products at 2f1 − f2 and 2f2 − f1",
+     ["Mics at f_{1} and f_{2} mix and create third-order products at 2f_{1} − f_{2} and 2f_{2} − f_{1}",
       "A third mic tuned to a ghost picks it up as noise or crackle",
       "Most manufacturers recommend at least 250 kHz between any product and any mic (Shure)"],
      size=20, bullets=True, space_after=6)
@@ -230,8 +257,8 @@ notes(s, "This is the whole interface. You say the band, how many mics, the grid
 # 5. The bridge
 s = new_slide("The bridge: planning rules become qubit interactions")
 steps = [("Rules", "Mics 500 kHz apart. No product within 250 kHz of a mic."),
-         ("Conflict sets", "15 close pairs, 56 triples (2fₖ − fₗ), 252 quadruples (fₖ + fₗ − fₚ)"),
-         ("Cost on 16 qubits", f"x = (1 − Z)/2 gives {sum(NUM['z_strings'].values())} Z-strings, up to 4 Z's each"),
+         ("Conflict sets", "15 close pairs, 56 triples (2f_{k} − f_{l}), 252 quadruples (f_{k} + f_{l} − f_{p})"),
+         ("Cost on 16 qubits", f"x_{{k}} = (1 − Z_{{k}})/2 gives {sum(NUM['z_strings'].values())} Z-strings, up to 4 Z's each"),
          ("QAOA", "Dicke start and XY mixer keep exactly 5 mics in every sample")]
 bw, gap = Inches(2.75), Inches(0.37)
 for i, (head, body) in enumerate(steps):
@@ -240,18 +267,18 @@ for i, (head, body) in enumerate(steps):
     text(s, x + Inches(0.2), Inches(1.7), bw - Inches(0.4), Inches(0.5), [f"{i + 1}. {head}"], size=20, bold=True,
          color=ACCENT, record=False)
     text(s, x + Inches(0.2), Inches(2.25), bw - Inches(0.4), Inches(1.4), [body], size=18, color=INK, record=False)
-    outline[-1]["body"].append(f"{i + 1}. {head}: {body}")
+    outline[-1]["body"].append(f"{i + 1}. {head}: {plain(body)}")
     if i < 3:
         a = s.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, x + bw + Inches(0.06), Inches(2.48), Inches(0.25), Inches(0.3))
         a.fill.solid()
         a.fill.fore_color.rgb = MUTED
         a.line.fill.background()
-box(s, MARGIN, Inches(4.0), W - 2 * MARGIN, Inches(0.95), fill=DARK)
-text(s, MARGIN + Inches(0.3), Inches(4.17), W - 2 * MARGIN - Inches(0.6), Inches(0.7),
-     ["C(x) = Σ close pairs xₖxₗ + Σ triples xₖxₗxₘ"
-      " + Σ quadruples xₖxₗxₚxₘ,   with exactly 5 mics"],
-     size=20, color=WHITE)
-text(s, MARGIN, Inches(5.25), Inches(12), Inches(2.0),
+box(s, MARGIN, Inches(3.92), W - 2 * MARGIN, Inches(1.2), fill=DARK)
+equation = picture(s, "fig_cost_equation.png", MARGIN, Inches(4.09), h=Inches(0.86),
+                   alt="C(x) equals the sum over close pairs of x_k x_l, plus the sum over triples of x_k x_l x_m, "
+                       "plus the sum over quadruples of x_k x_l x_p x_m, with the x values summing to 5 mics.")
+equation.left = (W - equation.width) // 2
+text(s, MARGIN, Inches(5.35), Inches(12), Inches(1.9),
      ["A plan is IM-free exactly when its cost is 0",
       "Three- and four-way IM rules go in directly as 3- and 4-qubit Z terms",
       "The mic count is fixed by the circuit, so there is no penalty weight to tune"],

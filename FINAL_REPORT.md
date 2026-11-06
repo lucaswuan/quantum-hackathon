@@ -6,14 +6,14 @@ Every deliverable in section 6 of the brief exists, and the final checks in sect
 
 | Deliverable | Where | State |
 |---|---|---|
-| Notebook (the main deliverable) | `mic_planner.ipynb` | Title plus nine sections, saved with outputs. Runs top to bottom headless with no errors. |
+| Notebook (the main deliverable) | `mic_planner.ipynb` | One self-contained file: title, Setup with the embedded code, nine sections, saved with outputs. Runs top to bottom with no errors, alone in an empty folder. |
 | Package | `micplanner/` (`engine.py`, `cost.py`, `quantum.py`, `baselines.py`, `plots.py`, `api.py`) | `plan_mics(...)` works on the story and the exclusion case. |
-| Tests | `tests/` | 35 passing (`.venv\Scripts\python -m pytest`). |
+| Tests | `tests/` | 36 passing (`.venv\Scripts\python -m pytest`). |
 | Figures | `figures/*.png`, `figures/numbers.json` | Built by `tools/make_figures.py`. `numbers.json` holds every number the slides quote. |
 | Slides | `slides/mic_planner_deck.pptx`, `slides/deck_outline.md` | 12 slides, 16:9, speaker notes on all. Render-checked in PowerPoint. |
 | Team prep | `team/` | Four explainers (one per role), judge Q&A (23 questions), demo script, limitations. |
 | README | `README.md` | Three-command run, folder map, how to rebuild. |
-| Build scripts | `tools/` | Figures, notebook, slides, slide render, output viewer. Added beyond the brief's folder map. |
+| Build scripts | `tools/` | Figures, notebook, standalone run, slides, slide render, output viewer. Added beyond the brief's folder map. |
 | CSV plans | `outputs/` | Written by `plan_mics`. Added beyond the brief's folder map. |
 | Log | `PROGRESS.md` | One section per phase. |
 
@@ -34,7 +34,7 @@ Git: one commit per phase, pushed to https://github.com/lucaswuan/quantum-hackat
 
 **Best plan.** All 24 clean plans tie at cost 0, so there is no single best. `plan_mics` returns the most common clean sample: **470.000, 470.500, 471.500, 472.750, 473.500 MHz** (0.5% of shots). Brute force, greedy and the integer program return 470.00, 470.50, 471.25, 472.25, 473.75. Every classical baseline solves the demo at once. Greedy from each of the 16 starting points ends clean 8 times. Simulated annealing ends clean in 50 of 50 runs.
 
-**Notebook runtime.** Headless `nbconvert --execute`: 81 s, 81 s, 116 s and 94 s wall-clock across the four full runs tonight (the in-notebook timer reads 77 to 109 s). The last run, on a copy that was then deleted, gave the same 7.11% and no errors. Under the 5-minute limit with room to spare.
+**Notebook runtime.** Headless `nbconvert --execute`: 81 s, 81 s, 116 s and 94 s wall-clock across the four full runs tonight (the in-notebook timer reads 77 to 109 s). The last run, on a copy that was then deleted, gave the same 7.11% and no errors. On November 5, running alone in an empty folder took 102 to 121 s, and 197 s in a brand-new environment including package installs. Under the 5-minute limit with room to spare.
 
 **Qubits and two-qubit gates** (basis `cx, rz, sx, x`, transpile level 1, all-to-all):
 
@@ -62,7 +62,7 @@ Git: one commit per phase, pushed to https://github.com/lucaswuan/quantum-hackat
 ## What is not verified
 
 - **No hardware run** (by design: simulator only).
-- **Only tested on this laptop:** Windows, Python 3.14.8. Not tried on macOS, Linux or other Python versions. Judges' machines may be slower.
+- **Only tested on this laptop:** Windows, Python 3.14.8. Qiskit 2.1.0, 2.6.1 and 2.6.2 all pass, but macOS, Linux, Colab and other Python versions are untested. Judges' machines may be slower.
 - **Babcock 1953** is cited from the reference list of Wikipedia's Golomb ruler article, not the paper itself. **Rosenberg 1975's** title comes from later bibliographies.
 - **Zhou et al.:** the abstract mentions initialization heuristics but not the name "INTERP", so the notebook says "interpolation, following Zhou et al.".
 - **"No earlier quantum approach that models IM"** rests on the brief's earlier GitHub search plus the two papers checked tonight. No new broad search was done.
@@ -84,7 +84,7 @@ Git: one commit per phase, pushed to https://github.com/lucaswuan/quantum-hackat
 
 ## Known issues
 
-- Runtime varies between runs (81 to 116 s here). Brute-force timing varies too (6 to 12 ms), so the slides say "about 10 ms".
+- Runtime varies between runs (81 to 121 s here). Brute-force timing varies too (6 to 12 ms), so the slides say "about 10 ms".
 - The earlier estimates (89 QUBO variables, about 5,700 CNOTs per cost layer) did not reproduce. The corrected numbers are logged in `PROGRESS.md`.
 - Placeholders remain: `[Team name]`, `[Member 1]` to `[Member 4]`, plus the "what did AI do" gap in `team/judge_qa.md` and `team/explainer_4_story_and_demo.md`.
 - `plan_mics` refuses grids above 20 points, by design.
