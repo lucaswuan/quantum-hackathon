@@ -1,6 +1,6 @@
 # IM-free wireless mic planner
 
-A Qiskit Fall Fest 2026 project (University of Waterloo) by [Team name]: [Member 1], [Member 2], [Member 3], [Member 4].
+A Qiskit Fall Fest 2026 project (University of Waterloo) by team primalQuant: Nojan Pourjafar, Jayden Cho, Jayden Wang, Noah Kim, and Lucas Wu.
 
 Wireless mics that transmit together create intermodulation (IM) products, ghost signals that can land on another mic's frequency. This project plans mic frequencies with no third-order IM hits. You describe the band in plain words:
 
