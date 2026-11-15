@@ -1,7 +1,5 @@
 # Explainer 4: the story, the slides and the demo
 
-**Role:** [Member 4]. You own `micplanner/api.py` (`plan_mics`), the slides and the live demo.
-
 ## The pitch in 30 seconds
 
 Wireless mics create ghost signals when they transmit together. If a ghost lands on another mic, it crackles. Pros avoid this with vendor software or an RF coordinator. We built a plain-English planner: you describe the band and the mics, and it returns a clean frequency plan. Underneath, the IM rules become three- and four-way interactions between qubits, and QAOA searches them with a circuit that always keeps exactly five mics. It doesn't beat classical methods, and we don't claim it does. It is a working bridge from a real sound-engineering problem to a quantum algorithm.
@@ -30,24 +28,23 @@ plan = plan_mics(band="470-474 MHz", mics=5, step="250 kHz", spacing="500 kHz",
 
 If no clean plan turns up in the samples, it says so and shows the best sample with its problems. It never quietly swaps in brute force. It refuses grids over 20 points, because the simulator would get too slow.
 
-## Slide guide (12 slides, about 6 minutes plus demo)
+## Slide guide (11 slides, about 6 minutes plus demo)
+
+The deck is `slides/mic_planner_slides.pdf`.
 
 | # | Slide | One line to say |
 |---|---|---|
 | 1 | Title | Plain-English mic planning with QAOA. Honest about what it is. |
-| 2 | Two mics make two ghosts | The physics in one picture. |
-| 3 | Products grow with the cube | 50 products from 5 mics, 31,200 from 40. |
+| 2 | The problem | Two mics make two ghosts. The physics in one picture. |
+| 3 | Products grow with the cube of the mic count | 50 products from 5 mics, 31,200 from 40. |
 | 4 | Our tool | One function call, a clean plan and a CSV. |
-| 5 | The bridge | Rules, then conflict sets, then 948 Z-strings, then QAOA that keeps 5 mics. |
-| 6 | Demo | Even spacing gives 20 hits. QAOA gives 0. Greedy also solves it. |
-| 7 | How well it works | 7.1% IM-free against 0.55% random. |
-| 8 | Why quantum, honestly | No speed-up. 16 qubits vs 121 QUBO variables. 12,716 CNOTs. |
-| 9 | Where it falls short | Golomb ruler, toy size, third order only, not run on hardware. |
-| 10 | What's next | Fifth order, real venues, scale, hardware. |
-| 11 | Team | Who did what. Fill in the names. |
-| 12 | References | Every number traces to the notebook. |
-
-Speaker notes for every slide are in the deck and in `slides/deck_outline.md`.
+| 5 | How it works | Rules, then conflict sets, then 948 Z-strings, then QAOA that keeps 5 mics. |
+| 6 | Demo: even spacing is the worst case | Even spacing gives 20 hits. QAOA gives 0. Greedy also solves it. |
+| 7 | How well does it work? | 7.1% IM-free against 0.55% random. |
+| 8 | Why quantum? | No speed-up. 16 qubits vs 121 QUBO variables. 12,716 CNOTs. |
+| 9 | Shortfalls | Classically trivial at this size, third order only, not run on hardware, 782+ qubits for 40 mics. |
+| 10 | What's next | Fifth order, real venues, hardware. |
+| 11 | References | Every number traces to the notebook. |
 
 ## Running the demo
 
@@ -73,5 +70,3 @@ Speaker notes for every slide are in the deck and in `slides/deck_outline.md`.
 **How does it compare with Shure Wireless Workbench?** Workbench is free, mature and far more complete: scan data, device control, many bands. Ours is a research prototype. Our contribution is the quantum modelling route and the plain-English interface, not a replacement.
 
 **Could a school really use this?** Not for a real show today. It plans on a toy grid with a simplified rule set. For a real show, use the vendor's free software.
-
-**What did AI do?** An AI coding assistant wrote the first version of the code, notebook, slides and these notes overnight, from a brief our team wrote. The brief set the problem, the rules and the honesty requirements. [Fill in what each of you checked, changed or rewrote before Friday.]

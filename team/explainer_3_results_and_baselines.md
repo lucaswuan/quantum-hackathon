@@ -1,7 +1,5 @@
 # Explainer 3: tuning, sampling, baselines and how to read the results
 
-**Role:** [Member 3]. You own the tuning and sampling parts of `micplanner/quantum.py`, plus `micplanner/baselines.py`, `micplanner/plots.py` and `tools/make_figures.py`.
-
 ## What this part does
 
 It picks good QAOA angles, runs the real Qiskit circuit, counts how often the samples are IM-free, and compares that with classical methods. It also makes the figures.
