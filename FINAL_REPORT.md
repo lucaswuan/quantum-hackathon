@@ -10,10 +10,10 @@ Every deliverable in section 6 of the brief exists, and the final checks in sect
 | Package | `micplanner/` (`engine.py`, `cost.py`, `quantum.py`, `baselines.py`, `plots.py`, `api.py`) | `plan_mics(...)` works on the story and the exclusion case. |
 | Tests | `tests/` | 36 passing (`.venv\Scripts\python -m pytest`). |
 | Figures | `figures/*.png`, `figures/numbers.json` | Built by `tools/make_figures.py`. `numbers.json` holds every number the slides quote. |
-| Slides | `slides/mic_planner_deck.pptx`, `slides/deck_outline.md` | 12 slides, 16:9, speaker notes on all. Render-checked in PowerPoint. |
-| Team prep | `team/` | Four explainers (one per role), judge Q&A (23 questions), demo script, limitations. |
+| Slides | `slides/mic_planner_slides.pdf` | The 11-slide deck we presented. It replaced the 12-slide draft built overnight, along with that draft's outline and the scripts that built and rendered it. |
+| Team prep | `team/` | Four explainers (one per topic), judge Q&A (22 questions), demo script, limitations. |
 | README | `README.md` | Three-command run, folder map, how to rebuild. |
-| Build scripts | `tools/` | Figures, notebook, standalone run, slides, slide render, output viewer. Added beyond the brief's folder map. |
+| Build scripts | `tools/` | Figures, notebook, standalone run, output viewer. Added beyond the brief's folder map. |
 | CSV plans | `outputs/` | Written by `plan_mics`. Added beyond the brief's folder map. |
 | Log | `PROGRESS.md` | One section per phase. |
 
@@ -86,34 +86,10 @@ Git: one commit per phase, pushed to https://github.com/lucaswuan/quantum-hackat
 
 - Runtime varies between runs (81 to 121 s here). Brute-force timing varies too (6 to 12 ms), so the slides say "about 10 ms".
 - The earlier estimates (89 QUBO variables, about 5,700 CNOTs per cost layer) did not reproduce. The corrected numbers are logged in `PROGRESS.md`.
-- Placeholders remain: `[Team name]`, `[Member 1]` to `[Member 4]`, plus the "what did AI do" gap in `team/judge_qa.md` and `team/explainer_4_story_and_demo.md`.
 - `plan_mics` refuses grids above 20 points, by design.
 - The figures in `figures/` come from `tools/make_figures.py`, not from the notebook, but they use the same code and seeds and give the same numbers.
 
 ## Suggested next steps, Wednesday to Friday
 
-**Everyone**
 - Read `team/limitations.md` and `team/judge_qa.md`. Each of you should be able to answer every question.
-- Fill in the placeholders and the "what did AI do" answer truthfully.
 - Confirm the judging time (the brief lists both 5:30 to 8:30 PM and 6:30 to 9:00 PM).
-
-**[Member 1]: problem and engine**
-- Work through `explainer_1_problem_engine.md` and rerun the engine cells.
-- Optional: add a notebook example on a finer grid (say 125 kHz steps over a narrower band) where the guard catches near misses. That shows the engine going beyond the Golomb-ruler case.
-- Stretch: fifth-order products.
-
-**[Member 2]: quantum circuit**
-- Work through `explainer_2_quantum_circuit.md`.
-- Optional: build the cost layer as one `PauliEvolutionGate` per layer (2,570 CNOTs instead of 4,006), and compare depth and simulation time.
-- Optional: transpile against a generic heavy-hex coupling map (for example `GenericBackendV2`, no account needed) to estimate routing overhead for the "hardware run" question.
-
-**[Member 3]: results and baselines**
-- Work through `explainer_3_results_and_baselines.md`.
-- Optional: rerun sampling with several seeds and report the spread of the 7.1%.
-- Optional: try w3 values and alpha values on the fast path and add a small table.
-- Keep any new number in sync between the notebook, `figures/numbers.json` and the slides: rerun `tools/make_figures.py`, then `tools/build_slides.py`.
-
-**[Member 4]: story and demo**
-- Rehearse `team/demo_script.md` on the presentation laptop. Time it.
-- Open the deck on the presentation machine and check fonts. Fill in slide 11.
-- Practise the "Why quantum?" and "Isn't brute force instant?" answers aloud.

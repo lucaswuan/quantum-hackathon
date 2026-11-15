@@ -1,6 +1,6 @@
 # IM-free wireless mic planner
 
-A Qiskit Fall Fest 2026 project (University of Waterloo) by [Team name]: [Member 1], [Member 2], [Member 3], [Member 4].
+A Qiskit Fall Fest 2026 project (University of Waterloo) by team primalQuant: Nojan Pourjafar, Jayden Cho, Jayden Wang, Noah Kim, and Lucas Wu.
 
 Wireless mics that transmit together create intermodulation (IM) products, ghost signals that can land on another mic's frequency. This project plans mic frequencies with no third-order IM hits. You describe the band in plain words:
 
@@ -53,10 +53,9 @@ mic-planner/
   figures/                   PNGs for the slides, plus numbers.json with every number they quote
   outputs/                   CSV plans written by plan_mics
   slides/
-    mic_planner_deck.pptx    12-slide deck with speaker notes
-    deck_outline.md          slide text and speaker notes
+    mic_planner_slides.pdf   the 11-slide deck we presented
   team/                      explainers, judge Q&A, demo script, limitations
-  tools/                     scripts that build the figures, notebook and slides, and render the slides
+  tools/                     scripts that build the figures and the notebook
   PROGRESS.md                build log with every decision
   FINAL_REPORT.md            morning summary
 ```
@@ -69,6 +68,4 @@ Edit the code in `micplanner/`, not the notebook's Setup cells. The notebook's c
 .venv\Scripts\python tools/make_figures.py      figures/ and figures/numbers.json (about 80 s)
 .venv\Scripts\python tools/build_notebook.py    mic_planner.ipynb with the code embedded, without outputs
 .venv\Scripts\python tools/run_standalone.py    runs the notebook alone in an empty folder and saves its outputs
-.venv\Scripts\python tools/build_slides.py      slides/ (reads figures/numbers.json)
-.venv\Scripts\python tools/render_slides.py     slide PNGs through PowerPoint (needs comtypes and PowerPoint)
 ```

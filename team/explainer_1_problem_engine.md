@@ -1,7 +1,5 @@
 # Explainer 1: the problem and the engine
 
-**Role:** [Member 1]. You own the radio physics and `micplanner/engine.py`.
-
 ## What this part does
 
 The engine turns a plain description ("470-474 MHz, 5 mics, 250 kHz steps") into a list of allowed frequencies and a list of conflicts. It can also check any plan and say exactly which mics create which ghost signal and where it lands. Everything quantum later is built on these lists.

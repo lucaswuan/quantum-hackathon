@@ -32,7 +32,7 @@ def embedded_module(name):
 md(r"""
 # IM-free wireless mic planner
 
-**[Team name]**: [Member 1], [Member 2], [Member 3], [Member 4]
+**primalQuant**: Nojan Pourjafar, Jayden Cho, Jayden Wang, Noah Kim, Lucas Wu
 Qiskit Fall Fest 2026, University of Waterloo
 
 Wireless mics fail in a way that surprises newcomers. When several mics transmit at once, their signals mix and create ghost signals at new frequencies. If a ghost lands on another mic's frequency, that mic crackles. Professionals plan around this with vendor software or a dedicated RF coordinator. This notebook turns the planning rules into a cost function on qubits and searches it with QAOA, behind one plain-English function:

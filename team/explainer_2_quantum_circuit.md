@@ -1,7 +1,5 @@
 # Explainer 2: the quantum circuit
 
-**Role:** [Member 2]. You own `micplanner/cost.py` and the circuit parts of `micplanner/quantum.py`.
-
 ## What this part does
 
 It turns the conflict lists from the engine into a quantum operator, and builds the QAOA circuit that searches for a plan. The circuit starts from every possible 5-mic plan at once and nudges the odds toward clean plans.
