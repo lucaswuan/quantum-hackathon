@@ -178,3 +178,10 @@ The submission form takes one `.ipynb` file, so the notebook has to run with not
   Same numbers means 7.11% IM-free samples, fidelity 1.0 and 12,716 CNOTs. A static check found nothing that would stop the code parsing on Python 3.10, but only Python 3.14 on Windows was actually run.
 - **Slide maths:** slide 5 used rare Unicode subscript characters that Calibri doesn't have. They rendered here through font fallback and can break elsewhere. Slide text now uses real subscript formatting, the cost function on slide 5 is a typeset image (`figures/fig_cost_equation.png`), and the chart labels on slides 2 and 3 use Matplotlib's maths text.
 - **Incident:** `tools/render_slides.py` attached to a PowerPoint that was already open, and its `Quit` very likely closed it. The deck had been locked seconds earlier, and PowerPoint was gone right after. The saved deck had no edits. The script now refuses to run while PowerPoint is open.
+
+## November 23: README demo GIF
+
+- `figures/demo.gif` (1000 x 540, 20 s, looping, about 2 MB) sits at the top of the README. It is built by `tools/make_demo_gif.py` in about a minute.
+- Three scenes: (1) two mics create two ghosts, and five evenly spaced mics take 20 hits; (2) the `plan_mics(...)` call, 16 frequencies as 16 qubits, and the IM-free share going 0.55% (Dicke start) to 1.8%, 4.0% and 7.1% at p = 1, 2, 3, then the measured bitstring; (3) the mics glide from the evenly spaced plan to the QAOA plan, and the hit counter drops 20 to 16 to 10 to 0.
+- Decision: every number comes from a fresh `plan_mics` run with the notebook's seeds, and the hit counter uses the checker's rule (strictly under 250 kHz), so the GIF can't drift from the README. p = 1 and p = 2 are exact probabilities. p = 3 is the 8,000-shot sample, which is where the README's 7.1% comes from (exact: 7.0%).
+- Decision: same palette and font as the other figures (DejaVu Sans ships with Matplotlib), and Pillow writes the GIF, so the script needs nothing beyond `requirements.txt`.
